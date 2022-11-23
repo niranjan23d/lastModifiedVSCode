@@ -16,20 +16,40 @@ function getStatusBar() {
 }
 
 /**
- * @param {Number} size filesize
+ * @param {Date} lmdate filesize
  */
-function sizeConvert(size) {
-  if (size >= 1048576) return `${Math.floor(size / 10485.76) / 100} MB`;
-  else if (size >= 1024) return `${Math.floor(size / 10.24) / 100} KB`;
-  else return `${size} B`;
+function sizeConvert(lmdate, mtimeS) {
+  let seconds = (new Date().getTime() - mtimeS) / 1000
+  console.log(new Date().getTime());
+  console.log(mtimeS);
+  console.log(seconds);
+  let month = lmdate.getMonth();
+  let day = lmdate.getDate();
+  let year = lmdate.getFullYear();
+  let hr = lmdate.getHours();
+  let min = lmdate.getMinutes();
+  let sec = lmdate.getSeconds();
+
+  let dn = ""
+  if (hr>12){
+    dn = "PM"
+  }
+  else{
+    dn = "AM"
+  }
+
+
+
+  return `Last Modified on ${month}/${day}/${year} at ${hr}:${min}:${sec} ${dn}`;
 }
 
 /**
  * @param {import('vscode').TextDocument} doc
  */
 function updateSize(doc) {
-  const size = fs.statSync(doc.fileName).size;
-  const sizeMan = sizeConvert(size);
+  const lastModified = fs.statSync(doc.fileName).mtime;
+  const timeInSec = fs.statSync(doc.fileName).mtimeMs;
+  const sizeMan = sizeConvert(lastModified, timeInSec);
   eventCollection.statusBar.text = sizeMan;
 }
 
