@@ -2,4 +2,4 @@
 
 ## [1.0.0]
 
-- reconstruct code
+- Show Last Modified Date
